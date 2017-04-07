@@ -23,9 +23,9 @@ def get_rank_count():
 
 def get_seconds():
     """计算距离指定时间点剩余的时间"""
-    minute = time.localtime().tm_min
-    minute %= 30
-    return (30 - minute) * 60
+    t = time.localtime()
+    minute = t.tm_min % 30
+    return (30 - minute) * 60 - t.tm_sec
 
 
 class NoMixedCaseMeta(type):
