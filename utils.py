@@ -15,6 +15,19 @@ from urllib.parse import unquote
 from traceback import format_exc
 
 
+def get_rank_count():
+    """计算当前时间对应的场次"""
+    t = time.localtime()
+    return t.tm_hour * 2 + int(t.tm_min / 30) + 1
+
+
+def get_seconds():
+    """计算距离指定时间点剩余的时间"""
+    minute = time.localtime().tm_min
+    minute %= 30
+    return (30 - minute) * 60
+
+
 class NoMixedCaseMeta(type):
     """拒绝大小写混合的类成员"""
 
