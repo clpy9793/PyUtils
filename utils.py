@@ -17,7 +17,18 @@ from traceback import format_exc
 from heapq import *
 
 
+class ProcessPool(object):
+    """进程池"""
+
+    def __init__(sefl, processes=10):
+        pass
+
+    def apply_async(self):
+        pass
+        
+
 def gen_shandw_sign(data, key=""):
+    """sdw"""
     data = {str(k): v for k, v in data.items()}
     rst = sorted(data.items(), key=lambda x: x[0])
     rst = ["{}={}".format(i[0], i[1])
@@ -25,7 +36,7 @@ def gen_shandw_sign(data, key=""):
     print(rst)
     stringA = "&".join(rst)
     stringSignTemp = "{}{}".format(stringA, key)
-    signValue = hashlib.md5(stringSignTemp).hexdigest().lower()
+    signValue = hashlib.md5(stringSignTemp.encode()).hexdigest().lower()
     return signValue
 
 
