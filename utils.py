@@ -9,10 +9,24 @@ import time
 import copy
 import types
 import pandas
+import hashlib
 from inspect import signature, isfunction
 from functools import wraps
 from urllib.parse import unquote
 from traceback import format_exc
+from heapq import *
+
+
+def gen_shandw_sign(data, key=""):
+    data = {str(k): v for k, v in data.items()}
+    rst = sorted(data.items(), key=lambda x: x[0])
+    rst = ["{}={}".format(i[0], i[1])
+           for i in rst if (i[0] != 'memo' and i[1])]
+    print(rst)
+    stringA = "&".join(rst)
+    stringSignTemp = "{}{}".format(stringA, key)
+    signValue = hashlib.md5(stringSignTemp).hexdigest().lower()
+    return signValue
 
 
 def get_rank_count():
