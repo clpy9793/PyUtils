@@ -15,17 +15,12 @@ from functools import wraps
 from urllib.parse import unquote
 from traceback import format_exc
 from heapq import *
+from operatore import itemgetter
 
 
-class ProcessPool(object):
-    """进程池"""
+def fun(d):
+    return sorted(d.items(), key=lambda x: x)
 
-    def __init__(sefl, processes=10):
-        pass
-
-    def apply_async(self):
-        pass
-        
 
 def gen_shandw_sign(data, key=""):
     """sdw"""
