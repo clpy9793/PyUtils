@@ -15,7 +15,23 @@ from functools import wraps
 from urllib.parse import unquote
 from traceback import format_exc
 from heapq import *
-from operatore import itemgetter
+from operator import itemgetter
+from contextlib import contextmanager
+
+
+@contextmanager
+def closing(thing):
+    try:
+        yield thing
+    finally:
+        thing.close()
+
+
+@contextmanager
+def time_sign():
+    print('{}'.format(time.asctime()))
+    yield
+    print('\n{}'.format(time.asctime()))
 
 
 def fun(d):
