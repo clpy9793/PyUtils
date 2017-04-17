@@ -12,11 +12,55 @@ import pandas
 import hashlib
 from inspect import signature, isfunction
 from functools import wraps
-from urllib.parse import unquote
 from traceback import format_exc
 from heapq import *
 from operator import itemgetter
 from contextlib import contextmanager
+from threading import Semaphore, Thread, Event
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urllib import unquote
+
+class EventThread:
+    """基于事件的线程"""
+
+    def __init__(self):
+        self.event = Event()
+        self.count = 0
+
+    def start_task(self):
+        self.event.wait()
+        self.count += 1
+        print('count: {}\n'.format(self.count))
+
+    def run(self):
+        for i in range(10):
+            t = Thread(target=self.start_task)
+            t.start()
+
+    def start(self):
+        self.event.set()
+
+
+class SemaphoreThread:
+    """基于信号量的线程"""
+
+    def __init__(self):
+        self.sema = Semaphore()
+        self.count = 0
+
+    def start_task(self):
+        self.sema.acquire()
+        self.count += 1
+        print('coutn: {}\n'.format(self.count))
+
+    def run(self):
+        for i in range(10):
+            t = Thread(target=self.start_task)
+
+    def next(self):
+        self.sema.release()
 
 
 @contextmanager
@@ -164,17 +208,27 @@ def timethis(func):
     return wrapper
 
 
+# def unquotedata(data):
+#     """去URL编码"""
+#     try:
+#         d = copy.deepcopy(data)
+#         for k, v in d.items():
+#             if v and isinstance(v, str):
+#                 d[k] = unquote(v)
+#         else:
+#             return d
+#     except Exception:
+#         return data
+
 def unquotedata(data):
     """去URL编码"""
-    try:
-        d = copy.deepcopy(data)
-        for k, v in d.items():
-            if v and isinstance(v, str):
-                d[k] = unquote(v)
-        else:
-            return d
-    except Exception:
-        return data
+    d = {}
+    for k, v in data.items():
+        try:
+            d[k] = unquote(v)
+        except Exception:
+            d[k] = v
+    return d
 
 
 if __name__ == '__main__':
