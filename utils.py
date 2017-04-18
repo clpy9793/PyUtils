@@ -22,6 +22,10 @@ try:
 except ImportError:
     from urllib import unquote
 
+
+
+
+
 class EventThread:
     """基于事件的线程"""
 
@@ -229,6 +233,13 @@ def unquotedata(data):
         except Exception:
             d[k] = v
     return d
+
+def bytes_2_b64(data):
+    """二进制图片b64编码"""
+    from base64 import b64encode
+    return b64encode(data)
+    
+
 
 
 if __name__ == '__main__':
