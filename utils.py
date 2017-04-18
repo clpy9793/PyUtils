@@ -10,17 +10,47 @@ import copy
 import types
 import pandas
 import hashlib
+import binascii
+import threading
 from inspect import signature, isfunction
 from functools import wraps
 from traceback import format_exc
 from heapq import *
 from operator import itemgetter
 from contextlib import contextmanager
-from threading import Semaphore, Thread, Event
+from threading import Semaphore, Thread, Event, Lock
 try:
     from urllib.parse import unquote
 except ImportError:
     from urllib import unquote
+
+
+
+
+class SharedCounter:
+
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.value = 999999999
+
+    def incr(self):
+        while True:
+            with self.lock:
+                print('Before incr: {}'.format(self.value))
+                self.value += 1
+                time.sleep(1)
+                print('After incr: {}'.format(self.value))
+
+    def decr(self):
+        while True:
+            with self.lock:
+                self.value -= 1
+
+    def run(self):
+        t = threading.Thread(target=self.decr)
+        t.start()
+        t = threading.Thread(target=self.incr)
+        t.start()
 
 
 
@@ -212,18 +242,6 @@ def timethis(func):
     return wrapper
 
 
-# def unquotedata(data):
-#     """去URL编码"""
-#     try:
-#         d = copy.deepcopy(data)
-#         for k, v in d.items():
-#             if v and isinstance(v, str):
-#                 d[k] = unquote(v)
-#         else:
-#             return d
-#     except Exception:
-#         return data
-
 def unquotedata(data):
     """去URL编码"""
     d = {}
@@ -233,12 +251,6 @@ def unquotedata(data):
         except Exception:
             d[k] = v
     return d
-
-def bytes_2_b64(data):
-    """二进制图片b64编码"""
-    from base64 import b64encode
-    return b64encode(data)
-    
 
 
 
