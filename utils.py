@@ -27,74 +27,7 @@ except ImportError:
 
 
 
-class SharedCounter:
 
-    def __init__(self):
-        self.lock = threading.Lock()
-        self.value = 999999999
-
-    def incr(self):
-        while True:
-            with self.lock:
-                print('Before incr: {}'.format(self.value))
-                self.value += 1
-                time.sleep(1)
-                print('After incr: {}'.format(self.value))
-
-    def decr(self):
-        while True:
-            with self.lock:
-                self.value -= 1
-
-    def run(self):
-        t = threading.Thread(target=self.decr)
-        t.start()
-        t = threading.Thread(target=self.incr)
-        t.start()
-
-
-
-
-
-class EventThread:
-    """基于事件的线程"""
-
-    def __init__(self):
-        self.event = Event()
-        self.count = 0
-
-    def start_task(self):
-        self.event.wait()
-        self.count += 1
-        print('count: {}\n'.format(self.count))
-
-    def run(self):
-        for i in range(10):
-            t = Thread(target=self.start_task)
-            t.start()
-
-    def start(self):
-        self.event.set()
-
-
-class SemaphoreThread:
-    """基于信号量的线程"""
-
-    def __init__(self):
-        self.sema = Semaphore()
-        self.count = 0
-
-    def start_task(self):
-        self.sema.acquire()
-        self.count += 1
-        print('coutn: {}\n'.format(self.count))
-
-    def run(self):
-        for i in range(10):
-            t = Thread(target=self.start_task)
-
-    def next(self):
-        self.sema.release()
 
 
 @contextmanager
