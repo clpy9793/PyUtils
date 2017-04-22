@@ -122,6 +122,8 @@ class CSVRender(object):
             if file_name == ignroe:
                 continue
             df = pd.read_csv(os.path.abspath(file_name))
+            if column not in df.columns:
+                continue            
             yield file_name, list(df[column])
 
     def update_orign_file(self):
