@@ -25,6 +25,26 @@ except ImportError:
     from urllib import unquote
 
 
+class Dict(dict):
+    '''支持a.b和deepcopy操作的类字典'''
+
+    def __new__(cls, *args, **kwargs):
+        return super().__new__(cls, *args, **kwargs)
+
+    def __getattr__(self, x):
+        return self[x]
+
+    def __setattr__(self, x, y):
+        self[x] = y        
+
+    def __copy__(self):
+        return Dict(copy.copy(dict(self)))
+
+
+    def __deepcopy__(self, memo):
+        return Dict(copy.deepcopy(dict(self)))
+
+
 class ProcessPool(object):
     """进程池"""
 
@@ -107,10 +127,30 @@ class CSVRender(object):
 
     def __init__(self, csv_file=None):
         if csv_file is not None:
-            self.df = pd.read_csv(csv_file)
+            self._df = pd.read_csv(csv_file)
 
     def read_csv(self):
         pass
+
+    def all(self, index=0):
+        '''根据key生成嵌套对象'''
+        rst = {}
+        key = self._df.columns[index]
+        for i, _ in enumerate(self._df[key]):
+            s = self._df.ix[i]
+            key_id = s[key]
+            d = {}
+            for k, v in s.items():
+                if v == key_id:
+                    continue
+                if isinstance(v, str):
+                    v = eval(v)
+                d[k] = v
+
+            rst[key_id] = Dict(d)
+        return rst
+
+
 
     def get_csv_files(self):
         '''读取当前目录的csv文件'''
@@ -123,7 +163,7 @@ class CSVRender(object):
                 continue
             df = pd.read_csv(os.path.abspath(file_name))
             if column not in df.columns:
-                continue            
+                continue
             yield file_name, list(df[column])
 
     def update_orign_file(self):
@@ -149,7 +189,6 @@ class CSVRender(object):
         if not isfunction(fn):
             return False
         pd.read_csv(csv_file)
-        pass
 
 
 if __name__ == '__main__':

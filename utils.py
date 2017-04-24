@@ -186,6 +186,53 @@ def unquotedata(data):
     return d
 
 
+def gen_drop(drop_id, count, can_repeat, exclude_list):
+    '''随机抽奖'''
+    try:
+        drop_info = copy.deepcopy(DROP[drop_id])
+        drop_items = drop_info.Items
+        rate_total = 0
+        if exclude_list is not None:
+            for i in exclude_list:
+                drop_items = filter(lambda x: x.get("id") != i.get("id") or x.get("count") != i.get("count"), drop_items)
+
+        for k in drop_items:
+            rate_total += k["rate"]
+        # rate_total必须-1  否则有1/(rate+1)的概率取不到物品
+        rate_total -= 1
+        drop_out_item = []
+        random_result = 0
+
+        for i in range(count):
+            if rate_total > 0:
+                random_result = random.randint(0, rate_total)
+            rate_base = 0
+            # python循环用倒序可以变更list
+            for j in range(len(drop_items) - 1, -1, -1):
+                if random_result < rate_base + drop_items[j]["rate"]:
+                    new_drop_info = DROP.get(drop_items[j]["id"])
+                    tmp_count = drop_items[j].get('count', 1)
+                    if new_drop_info is not None:
+                        new_drop_item = gen_drop(new_drop_info.Id, tmp_count, can_repeat, exclude_list)
+                        for item in new_drop_item:
+                            drop_out_item.append(item)
+                    else:
+                        tmp = {"id": drop_items[j]["id"], "count": drop_items[j]["count"]}
+                        if 'package' in drop_items[j]:
+                            tmp['package'] = drop_items[j]['package']
+                        drop_out_item.append(tmp)
+
+                    if can_repeat is False:
+                        # 从当前列表里面移除掉这个物品 并把总的机率减低
+                        rate_total -= drop_items[j]["rate"]
+                        del drop_items[j]
+                    break
+                else:
+                    rate_base += drop_items[j]["rate"]
+        return drop_out_item
+    except Exception:
+        traceback.print_exc()
+
 
 if __name__ == '__main__':
     pass
