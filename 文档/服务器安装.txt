@@ -1,0 +1,163 @@
+操作系统:ubuntu
+
+服务器库安装
+
+1、安装openssh-server
+sudo apt-get install openssh-server
+
+2、安装setuptools
+wget http://peak.telecommunity.com/dist/ez_setup.py
+sudo python ez_setup.py
+或者
+#sudo apt-get install python-setuptools
+
+3、
+
+	Ubuntu安装完毕后，默认使用的是官方的源，在国内访问速度很慢，这里介绍更换为阿里云的源方法。
+	步骤如下：
+
+	3.1.备份源配置文件
+			sudo cp /etc/apt/sources.list /etc/apt/sources.list_backup
+	3.2.用编辑器打开源配置文件
+			sudo vim /etc/apt/sources.list
+	3.3.删除文件内容，更换为以下内容（也可使用其他源）
+			deb http://mirrors.aliyun.com/ubuntu trusty main restricted
+			deb-src http://mirrors.aliyun.com/ubuntu trusty main restricted
+			 
+			## Major bug fix updates produced after the final release of the
+			## distribution.
+			deb http://mirrors.aliyun.com/ubuntu trusty-updates main restricted
+			deb-src http://mirrors.aliyun.com/ubuntu trusty-updates main restricted
+			 
+			## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+			## team. Also, please note that software in universe WILL NOT receive any
+			## review or updates from the Ubuntu security team.
+			deb http://mirrors.aliyun.com/ubuntu trusty universe
+			deb-src http://mirrors.aliyun.com/ubuntu trusty universe
+			deb http://mirrors.aliyun.com/ubuntu trusty-updates universe
+			deb-src http://mirrors.aliyun.com/ubuntu trusty-updates universe
+			 
+			## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+			## team, and may not be under a free licence. Please satisfy yourself as to
+			## your rights to use the software. Also, please note that software in
+			## multiverse WILL NOT receive any review or updates from the Ubuntu
+			## security team.
+			deb http://mirrors.aliyun.com/ubuntu trusty multiverse
+			deb-src http://mirrors.aliyun.com/ubuntu trusty multiverse
+			deb http://mirrors.aliyun.com/ubuntu trusty-updates multiverse
+			deb-src http://mirrors.aliyun.com/ubuntu trusty-updates multiverse
+			 
+			## N.B. software from this repository may not have been tested as
+			## extensively as that contained in the main release, although it includes
+			## newer versions of some applications which may provide useful features.
+			## Also, please note that software in backports WILL NOT receive any review
+			## or updates from the Ubuntu security team.
+			deb http://mirrors.aliyun.com/ubuntu trusty-backports main restricted universe multiverse
+			deb-src http://mirrors.aliyun.com/ubuntu trusty-backports main restricted universe multiverse
+			 
+			deb http://security.ubuntu.com/ubuntu trusty-security main restricted
+			deb-src http://security.ubuntu.com/ubuntu trusty-security main restricted
+			deb http://security.ubuntu.com/ubuntu trusty-security universe
+			deb-src http://security.ubuntu.com/ubuntu trusty-security universe
+			deb http://security.ubuntu.com/ubuntu trusty-security multiverse
+			deb-src http://security.ubuntu.com/ubuntu trusty-security multiverse
+	3.4.执行以下命令，刷新
+		sudo apt-get clean
+		sudo apt-get update
+
+3.安装python-dev
+sudo apt-get install python-dev
+
+
+4、安装编译包
+sudo apt-get install build-essential
+
+
+5、安装pip
+
+sudo apt-get install python-pip
+
+
+
+6、安装twisted
+
+sudo pip install twisted
+（会自动安装zope.interface）
+
+
+或者
+sudo apt-get install python-twisted
+或者
+*sudo apt-get install python-setuptools
+
+Sudo apt-get install python-dev
+
+Sudo easy_install twisted
+
+
+
+7、安装git
+sudo apt-get install git
+
+
+8、安装yajl
+sudo pip install yajl -i http://e.pypi.python.org/simple
+或
+ wget https://pypi.python.org/packages/source/y/yajl/yajl-0.3.5.tar.gz
+ #tar xf yajl-0.3.5.tar.gz
+ tar -zxvf yajl-0.3.5.tar.gz
+
+ cd yajl-0.3.5/setup.py
+ sudo python setup.py install
+
+
+9、安装cyclone
+sudo pip install cyclone
+
+10、安装Mysql-python
+sudo apt-get install libmysqld-dev
+
+sudo pip install Mysql-python
+
+
+
+
+10、安装DBUtils
+
+sudo pip install DBUtils
+
+11、安装 redis
+
+sudo apt-get install redis-server 
+sudo apt-get install python-redis
+
+12、安装mysql
+sudo apt-get install mysql-server
+--如果安装不成功
+	sudo rm /var/lib/mysql/ -R
+	sudo rm /etc/mysql/ -R
+	sudo apt-get autoremove mysql* --purge
+	sudo apt-get remove apparmor
+	sudo apt-get install mysql-server
+
+
+13、执行mysql目录里面的.sh
+bash init_db.sh
+
+14、修改common里面的config.py数据库设定
+ 
+15、安装msgpack
+apt-get install msgpack-python
+
+
+16、安装six 与 pytz
+sudo pip install six [python2.7与python3 兼容器]
+sudo pip install pytz [时区管理]
+sudo pip install funcy [容器快捷库]
+sudo pip install sortedcontainers [排序相关库]
+
+
+17、使用./start运行服务器
+
+
+

@@ -1,0 +1,118 @@
+yum
+1. sudo yum install openssh-server
+
+2. sudo yum  install gcc gcc-c++ kernel-devel
+
+3. sudo yum  install python-devel libxslt-devel 
+
+4. sudo yum install openssl-devel 
+
+5. sudo yum install redis
+
+6. sudo yum install python-redis
+
+
+
+pip
+1. sudo pip install twisted==13.2.0
+
+2. pip install cyclone==1.0rc5
+
+3. pip install six pytz funcy sortedcontainers yajl
+
+4. pip install msgpack-python dbutils pycrypto
+
+
+
+
+
+path
+
+1. sudo mkdir /workspace
+
+2.  上传项目到/workspace
+项目结构如下(只显示目录,未显示文件)
+
+workspace
+├── workspace/log
+│   └── workspace/log/debug
+├── workspace/manager
+│   └── workspace/manager/src
+├── workspace/newServer
+│   ├── workspace/newServer/account_server
+│   ├── workspace/newServer/center_server
+│   ├── workspace/newServer/channel_server
+│   ├── workspace/newServer/common
+│   ├── workspace/newServer/game_server
+│   ├── workspace/newServer/gateway_server
+│   ├── workspace/newServer/im_server
+│   ├── workspace/newServer/log
+│   ├── workspace/newServer/login_server
+│   ├── workspace/newServer/log_server
+│   ├── workspace/newServer/master_server
+│   ├── workspace/newServer/Mysql
+│   └── workspace/newServer/webRemoting
+└── workspace/Setup
+    └── workspace/Setup/\346\226\207\346\241\243
+
+3. sudo chmod 777 /workspace -R
+
+4. 修改 /workspace/newServer/common/config.py
+
+ACCOUNT_HOST
+LOGIN_HOST
+IM_HOST
+GW_HOST
+4个变量更改为本机IP
+
+5. 
+启动服务器
+sudo /workspace/start   
+
+关闭服务器
+sudo /workspace/stop
+
+重启服务器
+sudo python /workspace/restart.py 
+
+
+
+1. Redis
+修改redis.conf配置文件
+bind 127.0.0.1
+requirepass passwd
+
+启动服务
+service redis start
+
+关闭服务
+service redis stop
+
+重启服务器
+service redis stop
+
+
+
+MySQL
+1.安装
+wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+sudo rpm -ivh mysql-community-release-el7-5.noarch.rpm
+yum update
+sudo yum install mysql-server
+
+2.修改密码
+
+mysql -uroot -p
+UPDATE user SET Password=PASSWORD('newpassword') where USER='root';
+FLUSH PRIVILEGES;
+exit
+
+3.允许远程连接   例:用户名为root 密码为Bluefish@1234
+mysql -uroot -p
+grant all privileges on *.* to 'root'@'%' identified by 'Bluefish@1234' with grant option;
+FLUSH PRIVILEGES;
+exit
+
+
+4.重启服务器
+service mysqld restart

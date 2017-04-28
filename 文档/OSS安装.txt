@@ -1,0 +1,27 @@
+
+
+1、建立mysql数据库
+create database if not exists dev_oss default charset utf8 COLLATE utf8_general_ci;
+
+2、安装Django
+apt-get install python-django
+
+3、更新Django
+pip install --upgrade django
+
+4、安装pylibmc
+apt-get install python-pylibmc
+
+5、安装flup
+apt-get install python-flup
+
+6、导入数据
+bash init_db.sh
+
+7、同步数据库
+python manage.py syncdb
+
+8、使用bash ./django.sh start运行服务器
+
+
+
