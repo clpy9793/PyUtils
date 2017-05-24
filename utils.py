@@ -24,6 +24,32 @@ try:
 except ImportError:
     from urllib import unquote
 
+@try_again(3)
+def q():
+    import random
+    n = random.randint(1, 3)
+    print('xx')    
+    if n != 1:
+        raise TypeError('test')
+
+
+def try_again(n):
+    '''忽略一定次数异常'''
+    def decorate(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            times = 0
+            while True:
+                try:
+                    result = func(*args, **kwargs)
+                    return result
+                except Exception as e:
+                    if times == n:
+                        raise e
+                    times += 1
+        return wrapper
+    return decorate
+
 
 def give_hello(func):
     @wraps(func)
