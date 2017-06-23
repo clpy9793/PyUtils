@@ -24,6 +24,22 @@ try:
 except ImportError:
     from urllib import unquote
 
+
+def send_mail():
+    ''''''
+    url = 'http://api.sendcloud.net/apiv2/mail/send'
+    params = {
+        "apiUser": "",
+        "apiKey": "",
+        "from": "",
+        "fromName": "GA_ROBOT",
+        "to": "",
+        "subject": "程序故障",
+        "html": "你太棒了！你已成功的从SendCloud发送了一封测试邮件，接下来快登录前台去完善账户信息吧！",
+    }
+    pass
+
+
 def patch_crypto_be_discovery():
     """
     Monkey patches cryptography's backend detection.
@@ -50,7 +66,7 @@ def patch_crypto_be_discovery():
 def q():
     import random
     n = random.randint(1, 3)
-    print('xx')    
+    print('xx')
     if n != 1:
         raise TypeError('test')
 
@@ -95,9 +111,9 @@ def gen_drop(drop_id, count, can_repeat, exclude_list, DROP):
         if item['id'] in exclude_list:
             weights.append(0)
         else:
-            weights.append(item['rate'])            
+            weights.append(item['rate'])
         drop_list.append(item['id'])
-        
+
     s = pd.Series(drop_list)
     r = s.sample(count, replace=can_repeat, weights=weights)
     for i, v in enumerate(r):
@@ -262,7 +278,6 @@ def unquotedata(data):
         except Exception:
             d[k] = v
     return d
-
 
 
 if __name__ == '__main__':
