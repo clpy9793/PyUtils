@@ -4,6 +4,7 @@
 # @Author  : Your Name (you@example.org)
 # @Link    : http://example.org
 # @Version : $Id$
+from __future__ import print_function
 import os
 import time
 import copy
@@ -25,8 +26,54 @@ except ImportError:
     from urllib import unquote
 
 
+class Timer:
+    '''具有启动, 暂停, 重置功能的简易计时器'''
+
+    def __init__(self, func=time.perf_counter):
+        self.elapsed = 0.0
+        self._func = func
+        self._start = None
+
+    def start(self):
+        if self._start is not None:
+            raise RuntimeError('Already started')
+        self._start = self._func()
+
+    def stop(self):
+        if self._start is None:
+            raise RuntimeError('Not started')
+        end = self._func()
+        self.elapsed += end - self._start
+        self._start = None
+
+    def reset(self):
+        self.elapsed = 0.0
+
+    @property
+    def running(self):
+        return self._start is not None
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, *args):
+        self.stop()
+
+
+@contextmanager
+def timeblock(label):
+    '''代码块运行时间'''
+    start = time.perf_counter()
+    try:
+        yield
+    finally:
+        end = time.perf_counter()
+        print('{} : {}'.format(label, end - start))
+
+
 def send_mail():
-    ''''''
+    '''SendCloud发送邮件'''
     url = 'http://api.sendcloud.net/apiv2/mail/send'
     params = {
         "apiUser": "",
