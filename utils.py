@@ -304,6 +304,19 @@ def debugger(func, remote=("192.168.1.178", 13333)):
     return wrapper
 
 
+def see_context(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        print('function', func.__name__)
+        print('args', args)
+        print('kwargs', kwargs)
+        print('result', result)
+        return result
+    return wrapper
+
+
 def timethis(func):
     """函数消耗时间"""
     @wraps(func)
