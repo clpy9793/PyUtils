@@ -165,7 +165,8 @@ def gen_drop(drop_id, count, can_repeat, exclude_list, DROP):
     r = s.sample(count, replace=can_repeat, weights=weights)
     for i, v in enumerate(r):
         if v in DROP:
-            rst.extend(gen_drop(v, DROP[drop_id].Items[i]['count'], can_repeat, exclude_list, DROP))
+            rst.extend(
+                gen_drop(v, DROP[drop_id].Items[i]['count'], can_repeat, exclude_list, DROP))
         else:
             rst.append(v)
     return rst
@@ -339,6 +340,37 @@ def unquotedata(data):
             d[k] = v
     return d
 
+
+class ParseFor3721(object):
+
+    def __init__(self):
+        import numpy as np
+        import pandas as pd
+        from crm.models import *
+
+    def start(self):
+        df = pd.read_excel('3721.xlsx', skiprows=1).replace(np.nan, '')
+        self.parseDataFrame(df)
+
+    def parseDataFrame(self, df):
+        keys = ["厂家名称", "联系人", "电话", "地址", ]
+        for index, row in df.replace(np.nan, '', regex=True).iterrows():
+            pass
+
+    def save_to_db(self, series):
+        company = series['厂家名称'].strip()
+        contact = series['联系人'].strip()
+        mobile = series['电话'].strip()
+        address = sereis['地址'].strip()
+        if not Customer.objects.filter(company=company):
+            Customer.objects.create(
+                company=company,
+                contact=contact,
+                mobile=mobile,
+                address=address,
+                business='电视',
+                source='alibaba',
+            )
 
 if __name__ == '__main__':
     pass
