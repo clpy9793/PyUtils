@@ -346,7 +346,7 @@ class ParseFor3721(object):
     def __init__(self):
         import numpy as np
         import pandas as pd
-        from crm.models import *
+        import models.Customer as Customer
 
     def start(self):
         df = pd.read_excel('3721.xlsx', skiprows=1).replace(np.nan, '')
@@ -355,7 +355,8 @@ class ParseFor3721(object):
     def parseDataFrame(self, df):
         keys = ["厂家名称", "联系人", "电话", "地址", ]
         for index, row in df.replace(np.nan, '', regex=True).iterrows():
-            pass
+            if all((getattr(row, key, None) for key in keys)):
+                self.save_to_db(row)
 
     def save_to_db(self, series):
         company = series['厂家名称'].strip()
